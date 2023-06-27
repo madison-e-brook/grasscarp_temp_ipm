@@ -4,7 +4,7 @@ library(ipmr)
 library(lhs)
 setwd("~/Documents/Population modelling/Data")
 
-#maximum survival of 0.9!!!!!#####
+#THIS IS FOR A SURVIVAL MAX OF 0.9!!!!!#####
 degday<-3000
 
 #growth model####
@@ -96,10 +96,6 @@ abline(fecund.reg)
 #round to a whole number of eggs
 #(keep large number of sig dig because this is obtained by a relationship)
 fecund<-round(fecund.int+fecund.slope*degday,0)
-
-de<-seq(0,5000,500)
-fe<-signif(fecund.int+fecund.slope*de,2)
-plot(de,fe)
 
 #probability of reproducing####
 #relationship with parameters and dd
@@ -209,11 +205,11 @@ age_size_ipm<-define_impl(
 age_size_ipm<-define_domains(
   proto_ipm = age_size_ipm,#define the upper and lower ranges, and how many midpoints
   length = c(0,
-             2000,
-             200))
+             1100,
+             150))
 
 age_size_ipm<-define_pop_state(proto_ipm = age_size_ipm,
-                               n_length_age = rep(1/200,200))
+                               n_length_age = rep(1/150,150))
 
 
 age_size_ipm<-make_ipm(proto_ipm=age_size_ipm, iterations = 200,
@@ -291,7 +287,7 @@ head(fecuncity.data)
 
 
 #degree day sequence and params####
-degree.days<-seq(2000,5000,500)
+degree.days<-c(seq(2000,5000,500),2330,3560,4280)
 
 aam.slopes<-NULL
 aam.ints<-NULL

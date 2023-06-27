@@ -3,7 +3,7 @@ library(maps)
 library(viridis)
 
 
-
+setwd("~/Documents/Thesis/good code")
 #import raster map with only degree days less than 5000
 NA.map.dd<-raster("degree day map only over 5000.grd")
 plot(NA.map.dd)
@@ -104,10 +104,6 @@ abline(fecund.reg)
 #round to a whole number of eggs
 #(keep large number of sig dig because this is obtained by a relationship)
 fecund<-round(fecund.int+fecund.slope*degday,0)
-
-de<-seq(0,5000,500)
-fe<-signif(fecund.int+fecund.slope*de,2)
-plot(de,fe)
 
 #probability of reproducing####
 #relationship with parameters and dd

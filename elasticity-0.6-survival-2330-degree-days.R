@@ -1,7 +1,7 @@
-#default model survival 0.6 1000 degree days####
+#default model survival 0.6 2330 degree days####
 setwd("~/Documents/Population modelling/Data")
 
-degday<-1000
+degday<-2330
 
 #growth model####
 fish.data<-read.csv("sullivan data raw.csv")
@@ -92,10 +92,6 @@ abline(fecund.reg)
 #round to a whole number of eggs
 #(keep large number of sig dig because this is obtained by a relationship)
 fecund<-round(fecund.int+fecund.slope*degday,0)
-
-de<-seq(0,5000,500)
-fe<-signif(fecund.int+fecund.slope*de,2)
-plot(de,fe)
 
 #probability of reproducing####
 #relationship with parameters and dd
@@ -217,8 +213,8 @@ age_size_ipm<-make_ipm(proto_ipm=age_size_ipm, iterations = 200,
                                        standard.dev = standard.dev))
 
 
-lam.1000.0.6 <- lambda(age_size_ipm)
-lam.1000.0.6
+lam.2330.0.6 <- lambda(age_size_ipm)
+lam.2330.0.6
 #set up this model for the protoIPM
 use_proto <- age_size_ipm$proto_ipm
 
@@ -260,7 +256,7 @@ params<-c("surv.inflection",
           "hatch.surv",
           "young.mean",
           "young.sd")
-#1000 dd 0.9 survival +10####
+#2330 dd 0.9 survival +10####
 sens<-NULL
 elas<-NULL
 lambdas.10<-NULL
@@ -272,8 +268,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.surv.inflection-surv.inflection))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.surv.inflection-surv.inflection))*(surv.inflection/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.surv.inflection-surv.inflection))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.surv.inflection-surv.inflection))*(surv.inflection/lam.2330.0.6))
 
 #surv.slope
 constant_list_new<-constant_list
@@ -282,8 +278,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.surv.slope-surv.slope))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.surv.slope-surv.slope))*(surv.slope/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.surv.slope-surv.slope))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.surv.slope-surv.slope))*(surv.slope/lam.2330.0.6))
 
 #surv.min
 constant_list_new<-constant_list
@@ -292,8 +288,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.surv.min-surv.min))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.surv.min-surv.min))*(surv.min/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.surv.min-surv.min))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.surv.min-surv.min))*(surv.min/lam.2330.0.6))
 
 #surv.max
 constant_list_new<-constant_list
@@ -302,8 +298,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.surv.max-surv.max))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.surv.max-surv.max))*(surv.max/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.surv.max-surv.max))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.surv.max-surv.max))*(surv.max/lam.2330.0.6))
 
 #min.growth
 constant_list_new<-constant_list
@@ -312,8 +308,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.min.growth-min.growth))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.min.growth-min.growth))*(min.growth/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.min.growth-min.growth))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.min.growth-min.growth))*(min.growth/lam.2330.0.6))
 
 
 #max.growth.increment
@@ -323,8 +319,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.max.growth.increment-max.growth.increment))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.max.growth.increment-max.growth.increment))*(max.growth.increment/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.max.growth.increment-max.growth.increment))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.max.growth.increment-max.growth.increment))*(max.growth.increment/lam.2330.0.6))
 
 #max.size
 constant_list_new<-constant_list
@@ -333,8 +329,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.max.size-max.size))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.max.size-max.size))*(max.size/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.max.size-max.size))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.max.size-max.size))*(max.size/lam.2330.0.6))
 
 #min.std
 constant_list_new<-constant_list
@@ -343,8 +339,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.min.std-min.std))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.min.std-min.std))*(min.std/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.min.std-min.std))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.min.std-min.std))*(min.std/lam.2330.0.6))
 
 #division
 constant_list_new<-constant_list
@@ -353,8 +349,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.division-division))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.division-division))*(division/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.division-division))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.division-division))*(division/lam.2330.0.6))
 
 #length.int
 constant_list_new<-constant_list
@@ -363,8 +359,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.length.int-length.int))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.length.int-length.int))*(length.int/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.length.int-length.int))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.length.int-length.int))*(length.int/lam.2330.0.6))
 
 #length.slope
 constant_list_new<-constant_list
@@ -373,8 +369,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.length.slope-length.slope))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.length.slope-length.slope))*(length.slope/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.length.slope-length.slope))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.length.slope-length.slope))*(length.slope/lam.2330.0.6))
 
 #fecund
 constant_list_new<-constant_list
@@ -383,8 +379,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.fecund-fecund))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.fecund-fecund))*(fecund/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.fecund-fecund))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.fecund-fecund))*(fecund/lam.2330.0.6))
 
 #aam.int
 constant_list_new<-constant_list
@@ -393,8 +389,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.aam.int-aam.int))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.aam.int-aam.int))*(aam.int/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.aam.int-aam.int))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.aam.int-aam.int))*(aam.int/lam.2330.0.6))
 
 #aam.slope
 constant_list_new<-constant_list
@@ -403,8 +399,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.aam.slope-aam.slope))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.aam.slope-aam.slope))*(aam.slope/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.aam.slope-aam.slope))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.aam.slope-aam.slope))*(aam.slope/lam.2330.0.6))
 
 #percent.hact
 constant_list_new<-constant_list
@@ -413,8 +409,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.percent.hact-percent.hact))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.percent.hact-percent.hact))*(percent.hact/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.percent.hact-percent.hact))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.percent.hact-percent.hact))*(percent.hact/lam.2330.0.6))
 
 #hatch.surv
 constant_list_new<-constant_list
@@ -423,8 +419,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.hatch.surv-hatch.surv))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.hatch.surv-hatch.surv))*(hatch.surv/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.hatch.surv-hatch.surv))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.hatch.surv-hatch.surv))*(hatch.surv/lam.2330.0.6))
 
 #young.mean
 constant_list_new<-constant_list
@@ -433,8 +429,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.young.mean-young.mean))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.young.mean-young.mean))*(young.mean/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.young.mean-young.mean))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.young.mean-young.mean))*(young.mean/lam.2330.0.6))
 
 #young.sd
 constant_list_new<-constant_list
@@ -443,13 +439,13 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.young.sd-young.sd))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.young.sd-young.sd))*(young.sd/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.young.sd-young.sd))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.young.sd-young.sd))*(young.sd/lam.2330.0.6))
 
-elast.1000.06<-data.frame(params,sens,elas,lambdas.10)
-elast.1000.06
+elast.2330.06<-data.frame(params,sens,elas,lambdas.10)
+elast.2330.06
 setwd("~/Documents/Thesis/good code")
-write.csv(elast.1000.06,"elas.1000.06 plus 10.csv",
+write.csv(elast.2330.06,"elas.2330.06 plus 10.csv",
           row.names = F)
 
 #decrease parameters by 10%####
@@ -473,7 +469,7 @@ NEW.young.mean<-young.mean-young.mean*0.1
 NEW.young.sd<-young.sd-young.sd*0.1
 
 
-#1000 dd 0.9 survival -10####
+#2330 dd 0.9 survival -10####
 sens<-NULL
 elas<-NULL
 lambdas.10<-NULL
@@ -485,8 +481,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.surv.inflection-surv.inflection))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.surv.inflection-surv.inflection))*(surv.inflection/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.surv.inflection-surv.inflection))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.surv.inflection-surv.inflection))*(surv.inflection/lam.2330.0.6))
 
 #surv.slope
 constant_list_new<-constant_list
@@ -495,8 +491,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.surv.slope-surv.slope))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.surv.slope-surv.slope))*(surv.slope/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.surv.slope-surv.slope))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.surv.slope-surv.slope))*(surv.slope/lam.2330.0.6))
 
 #surv.min
 constant_list_new<-constant_list
@@ -505,8 +501,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.surv.min-surv.min))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.surv.min-surv.min))*(surv.min/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.surv.min-surv.min))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.surv.min-surv.min))*(surv.min/lam.2330.0.6))
 
 #surv.max
 constant_list_new<-constant_list
@@ -515,8 +511,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.surv.max-surv.max))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.surv.max-surv.max))*(surv.max/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.surv.max-surv.max))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.surv.max-surv.max))*(surv.max/lam.2330.0.6))
 
 #min.growth
 constant_list_new<-constant_list
@@ -525,8 +521,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.min.growth-min.growth))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.min.growth-min.growth))*(min.growth/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.min.growth-min.growth))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.min.growth-min.growth))*(min.growth/lam.2330.0.6))
 
 
 #max.growth.increment
@@ -536,8 +532,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.max.growth.increment-max.growth.increment))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.max.growth.increment-max.growth.increment))*(max.growth.increment/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.max.growth.increment-max.growth.increment))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.max.growth.increment-max.growth.increment))*(max.growth.increment/lam.2330.0.6))
 
 #max.size
 constant_list_new<-constant_list
@@ -546,8 +542,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.max.size-max.size))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.max.size-max.size))*(max.size/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.max.size-max.size))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.max.size-max.size))*(max.size/lam.2330.0.6))
 
 #min.std
 constant_list_new<-constant_list
@@ -556,8 +552,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.min.std-min.std))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.min.std-min.std))*(min.std/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.min.std-min.std))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.min.std-min.std))*(min.std/lam.2330.0.6))
 
 #division
 constant_list_new<-constant_list
@@ -566,8 +562,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.division-division))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.division-division))*(division/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.division-division))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.division-division))*(division/lam.2330.0.6))
 
 #length.int
 constant_list_new<-constant_list
@@ -576,8 +572,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.length.int-length.int))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.length.int-length.int))*(length.int/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.length.int-length.int))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.length.int-length.int))*(length.int/lam.2330.0.6))
 
 #length.slope
 constant_list_new<-constant_list
@@ -586,8 +582,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.length.slope-length.slope))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.length.slope-length.slope))*(length.slope/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.length.slope-length.slope))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.length.slope-length.slope))*(length.slope/lam.2330.0.6))
 
 #fecund
 constant_list_new<-constant_list
@@ -596,8 +592,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.fecund-fecund))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.fecund-fecund))*(fecund/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.fecund-fecund))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.fecund-fecund))*(fecund/lam.2330.0.6))
 
 #aam.int
 constant_list_new<-constant_list
@@ -606,8 +602,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.aam.int-aam.int))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.aam.int-aam.int))*(aam.int/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.aam.int-aam.int))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.aam.int-aam.int))*(aam.int/lam.2330.0.6))
 
 #aam.slope
 constant_list_new<-constant_list
@@ -616,8 +612,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.aam.slope-aam.slope))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.aam.slope-aam.slope))*(aam.slope/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.aam.slope-aam.slope))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.aam.slope-aam.slope))*(aam.slope/lam.2330.0.6))
 
 #percent.hact
 constant_list_new<-constant_list
@@ -626,8 +622,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.percent.hact-percent.hact))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.percent.hact-percent.hact))*(percent.hact/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.percent.hact-percent.hact))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.percent.hact-percent.hact))*(percent.hact/lam.2330.0.6))
 
 #hatch.surv
 constant_list_new<-constant_list
@@ -636,8 +632,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.hatch.surv-hatch.surv))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.hatch.surv-hatch.surv))*(hatch.surv/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.hatch.surv-hatch.surv))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.hatch.surv-hatch.surv))*(hatch.surv/lam.2330.0.6))
 
 #young.mean
 constant_list_new<-constant_list
@@ -646,8 +642,8 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.young.mean-young.mean))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.young.mean-young.mean))*(young.mean/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.young.mean-young.mean))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.young.mean-young.mean))*(young.mean/lam.2330.0.6))
 
 #young.sd
 constant_list_new<-constant_list
@@ -656,19 +652,19 @@ parameters(use_proto)<-constant_list_new
 test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 200)
 
 lambdas.10<-c(lambdas.10,lambda(test_ipm))
-sens<-c(sens,(lambda(test_ipm)-lam.1000.0.6)/(NEW.young.sd-young.sd))
-elas<-c(elas,((lambda(test_ipm)-lam.1000.0.6)/(NEW.young.sd-young.sd))*(young.sd/lam.1000.0.6))
+sens<-c(sens,(lambda(test_ipm)-lam.2330.0.6)/(NEW.young.sd-young.sd))
+elas<-c(elas,((lambda(test_ipm)-lam.2330.0.6)/(NEW.young.sd-young.sd))*(young.sd/lam.2330.0.6))
 
-elast.1000.06.10<-data.frame(params,sens,elas,lambdas.10)
-elast.1000.06.10
+elast.2330.06.10<-data.frame(params,sens,elas,lambdas.10)
+elast.2330.06.10
 setwd("~/Documents/Thesis/good code")
-write.csv(elast.1000.06.10,"elas.1000.06 minus 10.csv",
+write.csv(elast.2330.06.10,"elas.2330.06 minus 10.csv",
           row.names = F)
 
 
 
-sd(elast.1000.06.10$lambdas.10)
-elast.1000.06.10
+sd(elast.2330.06.10$lambdas.10)
+elast.2330.06.10
 
 
 

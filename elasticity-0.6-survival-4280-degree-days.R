@@ -93,9 +93,7 @@ abline(fecund.reg)
 #(keep large number of sig dig because this is obtained by a relationship)
 fecund<-round(fecund.int+fecund.slope*degday,0)
 
-de<-seq(0,4280,500)
-fe<-signif(fecund.int+fecund.slope*de,2)
-plot(de,fe)
+
 
 #probability of reproducing####
 #relationship with parameters and dd
@@ -180,7 +178,7 @@ age_size_ipm<-define_kernel(
   proto_ipm = age_size_ipm,
   name          = "F_age",
   family        = "CC",
-  formula       =  b * pr_age * hp * hs * rs * d_length,
+  formula       =  (b/2) * pr_age * hp * hs * rs * d_length,
   b             = fecund*((10^(length.int+length.slope*log10(length_1)))/1000),
   pr_age        = 1/(1+exp(aam.slope*(age-aam.int))),
   hp            = percent.hact,

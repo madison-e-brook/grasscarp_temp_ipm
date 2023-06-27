@@ -75,20 +75,12 @@ growth.sd<-standard.dev(sizes)
 
 x<-seq(0,1000,1)
 #plot distributions
-plot(x,dtnorm(x,growth.means[1]+sizes[1],growth.sd[1]),type="l",ylim=c(0,0.2))
+plot(x,dnorm(x,growth.means[1]+sizes[1],growth.sd[1]),type="l",ylim=c(0,0.2))
 for(i in 2:length(sizes)){
   points(x,dnorm(x,growth.means[i]+sizes[i],growth.sd[i]),type="l")
 }
 
-x<-seq(0,1000,1)
 
-points(x,dtnorm(x,growth.means[1]+sizes[1],growth.sd[1],lower=sizes[1]),type="l",col="red")
-for(i in 2:length(sizes)){
-  points(x,dtnorm(x,growth.means[i]+sizes[i],growth.sd[i],lower=sizes[i]),type="l",col="red")
-}
-
-legend("topleft",as.character(seq(100,900,150)),
-       lty=1)
 
 
 #model diagnostics####
@@ -351,9 +343,6 @@ abline(fecund.reg)
 #(keep large number of sig dig because this is obtained by a relationship)
 fecund<-round(fecund.int+fecund.slope*degday,0)
 
-de<-seq(0,5000,500)
-fe<-signif(fecund.int+fecund.slope*de,2)
-plot(de,fe)
 
 #probability of reproducing####
 #relationship with parameters and dd
