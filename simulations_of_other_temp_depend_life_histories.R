@@ -5,7 +5,7 @@ library(ipmr)
 setwd("~/Documents/Population modelling/Data")
 
 
-#growth and von bert from Sullivan et al., 2020####
+#growth and von bert####
 fish.data<-read.csv("sullivan data raw.csv")
 str(fish.data)
 
@@ -33,6 +33,10 @@ k.values<-c(0.17,0.615)
 
 
 #make relationship of temp and k####
+plot(temperatures,k.values)
+k.lm<-lm(k.values~temperatures)
+abline(k.lm)
+
 
 setwd("~/Documents/Thesis/good code")
 png("appendix 3 temp depen k plot.png", width= 2404, height= 1600, units="px", res = 300)
@@ -49,8 +53,12 @@ setwd("~/Documents/Population modelling/Data")
 L.values<-c(810,1297)
 temp.Lvalue<-c(5000,2500)
 
-
-#plot relationship of temp and Linf#####
+#make relationship of temp and k####
+plot(temp.Lvalue,L.values)
+L.lm<-lm(L.values~temp.Lvalue)
+abline(L.lm)
+expression(italic("L"["inf"]* "= 1784 - 0.19(degree days)"))
+#plot relationship of temp and L#####
 setwd("~/Documents/Thesis/good code")
 png("appendix 3 temp depen Linf plot.png", width= 2404, height= 1600, units="px", res = 300)
 plot(temp.Lvalue,L.values,pch=16,
@@ -65,6 +73,11 @@ survs<-c(0.6+0.6*0.2,
          0.6-0.6*0.2)
 temperatures<-c(2500,5000)
 
+
+plot(temperatures,survs)
+
+s.lm<-lm(survs~temperatures)
+abline(s.lm)
 
 setwd("~/Documents/Thesis/good code")
 png("appendix 3 temp depen survival plot.png", width= 2404, height= 1600, units="px", res = 300)
@@ -98,7 +111,7 @@ for(i in 1:length(temp)){
 
 length(max.growths)
 
-#if k and Linf both change####
+#if both change####
 
 max.growths.both<-numeric(length(temp))
 
@@ -210,7 +223,6 @@ abline(fecund.reg)
 #round to a whole number of eggs
 #(keep large number of sig dig because this is obtained by a relationship)
 fecund<-round(fecund.int+fecund.slope*degday,0)
-
 #probability of reproducing####
 #relationship with parameters and dd
 dd.para<-read.csv("degree day relationship with parameters.csv")
@@ -369,27 +381,27 @@ for(i in 2:length(fecundities)){
   curve(fecundities[i]*((10^(length.int+length.slope*log10(x)))/1000),0,1000,add=T)
 }
 
-#good version#####
+#model with no temp dependence######
 use_proto <- age_size_ipm$proto_ipm
 
-lambdas.normal<-NULL
+lambdas.no.temp<-NULL
 
 for(i in 1:length(temp)){
   constant_list_new <- list(
     surv.inflection=surv.inflection,
     surv.slope=surv.slope,
     surv.min=surv.min,
-    surv.max=0.6,
+    surv.max=surv_good[16],
     min.growth=min.growth,
-    max.growth.increment=max.growth.increment,
-    max.size=max.size,
+    max.growth.increment=max.growths[16],
+    max.size=L.inf.values[16],
     min.std=min.std,
     division=division,
     length.int=length.int,
     length.slope=length.slope,
-    fecund=fecundities[i],
-    aam.int=aam.ints[i],
-    aam.slope=aam.slopes[i],
+    fecund=fecundities[16],
+    aam.int=aam.ints[16],
+    aam.slope=aam.slopes[16],
     percent.hact= percent.hact,
     hatch.surv=hatch.surv,
     young.mean=young.mean,
@@ -397,53 +409,17 @@ for(i in 1:length(temp)){
   )
   parameters(use_proto)<-constant_list_new
   test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 100)
-  lambdas.normal<-c(lambdas.normal,lambda(test_ipm))
-}
-length(lambdas.normal)
-length(fecundities)
-
-plot(temp,lambdas.normal,
-     xlab="Annual Degree days",
-     ylab="Predicted Population Growth Rate",pch=16)
-
-#with just k changing####
-max.growths
-k.values
-lambdas.just.k<-NULL
-
-for(i in 1:length(temp)){
-  constant_list_new <- list(
-    surv.inflection=surv.inflection,
-    surv.slope=surv.slope,
-    surv.min=surv.min,
-    surv.max=0.6,
-    min.growth=min.growth,
-    max.growth.increment=max.growths[i],
-    max.size=max.size,
-    min.std=min.std,
-    division=division,
-    length.int=length.int,
-    length.slope=length.slope,
-    fecund=fecundities[i],
-    aam.int=aam.ints[i],
-    aam.slope=aam.slopes[i],
-    percent.hact= percent.hact,
-    hatch.surv=hatch.surv,
-    young.mean=young.mean,
-    young.sd=young.sd
-  )
-  parameters(use_proto)<-constant_list_new
-  test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 100)
-  lambdas.just.k<-c(lambdas.just.k,lambda(test_ipm))
+  lambdas.no.temp<-c(lambdas.no.temp,lambda(test_ipm))
 }
 
-plot(temp,lambdas.just.k,
+plot(temp,lambdas.no.temp,
      xlab="Annual Degree days",
      ylab="Predicted Population Growth Rate",pch=16)
 
 
-#with just survival changing#####
-max.growths
+#only survival######
+use_proto <- age_size_ipm$proto_ipm
+
 surv_good<-surv.values
 lambdas.just.surv<-NULL
 
@@ -460,9 +436,9 @@ for(i in 1:length(temp)){
     division=division,
     length.int=length.int,
     length.slope=length.slope,
-    fecund=fecundities[i],
-    aam.int=aam.ints[i],
-    aam.slope=aam.slopes[i],
+    fecund=fecundities[16],
+    aam.int=aam.ints[16],
+    aam.slope=aam.slopes[16],
     percent.hact= percent.hact,
     hatch.surv=hatch.surv,
     young.mean=young.mean,
@@ -477,19 +453,275 @@ plot(temp,lambdas.just.surv,
      xlab="Annual Degree days",
      ylab="Predicted Population Growth Rate",pch=16)
 
+#only growth######
+use_proto <- age_size_ipm$proto_ipm
 
-#with both k and Linf####
+surv_good<-surv.values
+lambdas.just.growth<-NULL
 
-
-lambdas.both<-NULL
 for(i in 1:length(temp)){
   constant_list_new <- list(
     surv.inflection=surv.inflection,
     surv.slope=surv.slope,
     surv.min=surv.min,
-    surv.max=0.6,
+    surv.max=surv_good[16],
     min.growth=min.growth,
-    max.growth.increment=max.growths.both[i],
+    max.growth.increment=max.growths[i],
+    max.size=L.inf.values[16],
+    min.std=min.std,
+    division=division,
+    length.int=length.int,
+    length.slope=length.slope,
+    fecund=fecundities[16],
+    aam.int=aam.ints[16],
+    aam.slope=aam.slopes[16],
+    percent.hact= percent.hact,
+    hatch.surv=hatch.surv,
+    young.mean=young.mean,
+    young.sd=young.sd
+  )
+  parameters(use_proto)<-constant_list_new
+  test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 100)
+  lambdas.just.growth<-c(lambdas.just.growth,lambda(test_ipm))
+}
+
+plot(temp,lambdas.just.growth,
+     xlab="Annual Degree days",
+     ylab="Predicted Population Growth Rate",pch=16)
+
+
+#only linf#####
+use_proto <- age_size_ipm$proto_ipm
+
+lambdas.just.Linf<-NULL
+
+for(i in 1:length(temp)){
+  constant_list_new <- list(
+    surv.inflection=surv.inflection,
+    surv.slope=surv.slope,
+    surv.min=surv.min,
+    surv.max=surv_good[16],
+    min.growth=min.growth,
+    max.growth.increment=max.growths[16],
+    max.size=L.inf.values[i],
+    min.std=min.std,
+    division=division,
+    length.int=length.int,
+    length.slope=length.slope,
+    fecund=fecundities[16],
+    aam.int=aam.ints[16],
+    aam.slope=aam.slopes[16],
+    percent.hact= percent.hact,
+    hatch.surv=hatch.surv,
+    young.mean=young.mean,
+    young.sd=young.sd
+  )
+  parameters(use_proto)<-constant_list_new
+  test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 100)
+  lambdas.just.Linf<-c(lambdas.just.Linf,lambda(test_ipm))
+}
+
+plot(temp,lambdas.just.Linf,
+     xlab="Annual Degree days",
+     ylab="Predicted Population Growth Rate",pch=16)
+
+#only growth and linf######
+use_proto <- age_size_ipm$proto_ipm
+
+lambdas.growth.Linf<-NULL
+
+for(i in 1:length(temp)){
+  constant_list_new <- list(
+    surv.inflection=surv.inflection,
+    surv.slope=surv.slope,
+    surv.min=surv.min,
+    surv.max=surv_good[16],
+    min.growth=min.growth,
+    max.growth.increment=max.growths[i],
+    max.size=L.inf.values[i],
+    min.std=min.std,
+    division=division,
+    length.int=length.int,
+    length.slope=length.slope,
+    fecund=fecundities[16],
+    aam.int=aam.ints[16],
+    aam.slope=aam.slopes[16],
+    percent.hact= percent.hact,
+    hatch.surv=hatch.surv,
+    young.mean=young.mean,
+    young.sd=young.sd
+  )
+  parameters(use_proto)<-constant_list_new
+  test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 100)
+  lambdas.growth.Linf<-c(lambdas.growth.Linf,lambda(test_ipm))
+}
+
+plot(temp,lambdas.growth.Linf,
+     xlab="Annual Degree days",
+     ylab="Predicted Population Growth Rate",pch=16)
+
+
+#only aam######
+use_proto <- age_size_ipm$proto_ipm
+
+lambdas.just.aam<-NULL
+
+for(i in 1:length(temp)){
+  constant_list_new <- list(
+    surv.inflection=surv.inflection,
+    surv.slope=surv.slope,
+    surv.min=surv.min,
+    surv.max=surv_good[16],
+    min.growth=min.growth,
+    max.growth.increment=max.growths[16],
+    max.size=L.inf.values[16],
+    min.std=min.std,
+    division=division,
+    length.int=length.int,
+    length.slope=length.slope,
+    fecund=fecundities[16],
+    aam.int=aam.ints[i],
+    aam.slope=aam.slopes[i],
+    percent.hact= percent.hact,
+    hatch.surv=hatch.surv,
+    young.mean=young.mean,
+    young.sd=young.sd
+  )
+  parameters(use_proto)<-constant_list_new
+  test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 100)
+  lambdas.just.aam<-c(lambdas.just.aam,lambda(test_ipm))
+}
+
+plot(temp,lambdas.just.aam,
+     xlab="Annual Degree days",
+     ylab="Predicted Population Growth Rate",pch=16)
+
+
+#only fecund######
+use_proto <- age_size_ipm$proto_ipm
+
+lambdas.just.fecund<-NULL
+
+for(i in 1:length(temp)){
+  constant_list_new <- list(
+    surv.inflection=surv.inflection,
+    surv.slope=surv.slope,
+    surv.min=surv.min,
+    surv.max=surv_good[16],
+    min.growth=min.growth,
+    max.growth.increment=max.growths[16],
+    max.size=L.inf.values[16],
+    min.std=min.std,
+    division=division,
+    length.int=length.int,
+    length.slope=length.slope,
+    fecund=fecundities[i],
+    aam.int=aam.ints[16],
+    aam.slope=aam.slopes[16],
+    percent.hact= percent.hact,
+    hatch.surv=hatch.surv,
+    young.mean=young.mean,
+    young.sd=young.sd
+  )
+  parameters(use_proto)<-constant_list_new
+  test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 100)
+  lambdas.just.fecund<-c(lambdas.just.fecund,lambda(test_ipm))
+}
+
+plot(temp,lambdas.just.fecund,
+     xlab="Annual Degree days",
+     ylab="Predicted Population Growth Rate",pch=16)
+
+
+
+#all positive factors#####
+use_proto <- age_size_ipm$proto_ipm
+
+lambdas.just.pos<-NULL
+
+for(i in 1:length(temp)){
+  constant_list_new <- list(
+    surv.inflection=surv.inflection,
+    surv.slope=surv.slope,
+    surv.min=surv.min,
+    surv.max=surv_good[16],
+    min.growth=min.growth,
+    max.growth.increment=max.growths[i],
+    max.size=L.inf.values[16],
+    min.std=min.std,
+    division=division,
+    length.int=length.int,
+    length.slope=length.slope,
+    fecund=fecundities[16],
+    aam.int=aam.ints[i],
+    aam.slope=aam.slopes[i],
+    percent.hact= percent.hact,
+    hatch.surv=hatch.surv,
+    young.mean=young.mean,
+    young.sd=young.sd
+  )
+  parameters(use_proto)<-constant_list_new
+  test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 100)
+  lambdas.just.pos<-c(lambdas.just.pos,lambda(test_ipm))
+}
+
+plot(temp,lambdas.just.pos,
+     xlab="Annual Degree days",
+     ylab="Predicted Population Growth Rate",pch=16)
+
+
+
+#all negative factors#####
+use_proto <- age_size_ipm$proto_ipm
+
+lambdas.just.neg<-NULL
+
+for(i in 1:length(temp)){
+  constant_list_new <- list(
+    surv.inflection=surv.inflection,
+    surv.slope=surv.slope,
+    surv.min=surv.min,
+    surv.max=surv_good[i],
+    min.growth=min.growth,
+    max.growth.increment=max.growths[16],
+    max.size=L.inf.values[i],
+    min.std=min.std,
+    division=division,
+    length.int=length.int,
+    length.slope=length.slope,
+    fecund=fecundities[i],
+    aam.int=aam.ints[16],
+    aam.slope=aam.slopes[16],
+    percent.hact= percent.hact,
+    hatch.surv=hatch.surv,
+    young.mean=young.mean,
+    young.sd=young.sd
+  )
+  parameters(use_proto)<-constant_list_new
+  test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 100)
+  lambdas.just.neg<-c(lambdas.just.neg,lambda(test_ipm))
+}
+
+plot(temp,lambdas.just.neg,
+     xlab="Annual Degree days",
+     ylab="Predicted Population Growth Rate",pch=16)
+
+
+
+
+#model with all factors#####
+use_proto <- age_size_ipm$proto_ipm
+
+lambdas.all.factor<-NULL
+
+for(i in 1:length(temp)){
+  constant_list_new <- list(
+    surv.inflection=surv.inflection,
+    surv.slope=surv.slope,
+    surv.min=surv.min,
+    surv.max=surv_good[i],
+    min.growth=min.growth,
+    max.growth.increment=max.growths[i],
     max.size=L.inf.values[i],
     min.std=min.std,
     division=division,
@@ -505,42 +737,140 @@ for(i in 1:length(temp)){
   )
   parameters(use_proto)<-constant_list_new
   test_ipm<-make_ipm(proto_ipm=use_proto, iterations = 100)
-  lambdas.both<-c(lambdas.both,lambda(test_ipm))
+  lambdas.all.factor<-c(lambdas.all.factor,lambda(test_ipm))
 }
 
-plot(temp,lambdas.both,
+plot(temp,lambdas.all.factor,
      xlab="Annual Degree days",
      ylab="Predicted Population Growth Rate",pch=16)
 
-
-
-#good plot for paper####
-
-plot(temp,lambdas.normal,ylim=c(0.7,1.1),pch=1)
-points(temp,lambdas.just.k,pch=2)
-points(temp,lambdas.both,pch=3)
-abline(h=1)
-
-lengend.titles<-c(
-  expression("Without Temperature Dependent Growth or Survival"),
-  expression("With a Temperature Dependent "*italic("k")*" value"),
-  expression("With a Temperature Dependent "*italic("k")*" and "*italic("L"["inf"])*" values"),
-  expression("With a Temperature Dependent "*italic("max"["s"])*" value")
-)
+#plot#####
 
 setwd("~/Documents/Thesis/good code")
-png("temp dependent growth.png", width= 2404, height= 1600, units="px", res = 300)
-plot(temp,lambdas.normal,ylim=c(0.7,1.2),type="l",
-     xlab="Annual Average Degree Days",
-     ylab=expression(lambda),
-     col=inferno(5)[1],lwd=2)
-points(temp,lambdas.just.k,type="l",col=inferno(5)[2],lwd=2)
-points(temp,lambdas.both,type="l",col=inferno(5)[3],lwd=2)
-points(temp,lambdas.just.surv,type="l",col=inferno(5)[4],lwd=2)
-abline(h=1,lty=2)
-legend("bottomright",lengend.titles,lwd=2,
-       lty=1,col=c(inferno(5)[1],inferno(5)[2],
-                   inferno(5)[3],inferno(5)[4]),bty="n",cex=0.9)
+png("simulation output figure.png", width= 2400, height= 2400, units="px", res = 300)
+layout(matrix(c(seq(1,9),10,10,10), ncol=3, byrow=TRUE),heights = c(1.5,1.5,1.5,0.5))
+
+par(mai=rep(0.5, 4),mar=c(4,3,1,1),cex=1.2)
+plot(temp,lambdas.just.growth,ylim=c(0.65,1.2),
+     xlab="",yaxt="n", main=expression(italic(k)),
+     ylab="",type="l",lwd=2.5,
+     panel.first = c(points(temp,lambdas.no.temp,type="l",lty=2,lwd=2.5,
+                            col="darkgrey")
+                     ,abline(h=1,lty=3,col="grey",lwd=2.5)))
+axis(2,at=seq(0.7,1.2,by=0.1),labels=seq(0.7,1.2,by=0.1),cex=1.5)
+title(ylab=expression(lambda),line=2)
+title(xlab="Annual Degree Days",line=2)
+text(4900,1.17,"a)")
+
+plot(temp,lambdas.just.Linf,ylim=c(0.65,1.2),
+     xlab="  ",yaxt="nn",main=expression(italic(L[inf])),
+     ylab="",type="l",lwd=2.5,
+     panel.first = c(points(temp,lambdas.no.temp,type="l",lty=2,lwd=2.5,
+                            col="darkgrey")
+                     ,abline(h=1,lty=3,col="grey",lwd=2.5)))
+axis(2,at=seq(0.7,1.2,by=0.1),labels=seq(0.7,1.2,by=0.1))
+title(ylab=expression(lambda),line=2)
+title(xlab="Annual Degree Days",line=2)
+
+text(4900,1.17,"b)")
+
+plot(temp,lambdas.growth.Linf,ylim=c(0.65,1.2),
+     xlab=" ",yaxt="nn",main=expression(paste(italic(k)," and ",italic(L[inf]),"")),
+     ylab="",type="l",lwd=2.5,
+     panel.first = c(points(temp,lambdas.no.temp,type="l",lty=2,lwd=2.5,
+                            col="darkgrey")
+                     ,abline(h=1,lty=3,col="grey",lwd=2.5)))
+axis(2,at=seq(0.7,1.2,by=0.1),labels=seq(0.7,1.2,by=0.1))
+title(ylab=expression(lambda),line=2)
+title(xlab="Annual Degree Days",line=2)
+
+text(4900,1.17,"c)")
+
+plot(temp,lambdas.just.aam,ylim=c(0.65,1.2),
+     xlab="  ",yaxt="nn",main=expression(paste(italic(alpha[m]))),
+     ylab="",type="l",lwd=2.5,
+     panel.first = c(points(temp,lambdas.no.temp,type="l",lty=2,lwd=2.5,
+                            col="darkgrey")
+                     ,abline(h=1,lty=3,col="grey",lwd=2.5)))
+axis(2,at=seq(0.7,1.2,by=0.1),labels=seq(0.7,1.2,by=0.1))
+title(ylab=expression(lambda),line=2)
+title(xlab="Annual Degree Days",line=2)
+
+text(4900,1.17,"d)")
+
+plot(temp,lambdas.just.fecund,ylim=c(0.65,1.2),
+     xlab="",yaxt="nn", main=expression(paste(italic(f),"")),
+     ylab="",type="l",lwd=2.5,
+     panel.first = c(points(temp,lambdas.no.temp,type="l",lty=2,lwd=2.5,
+                            col="darkgrey")
+                     ,abline(h=1,lty=3,col="grey",lwd=2.5)))
+axis(2,at=seq(0.7,1.2,by=0.1),labels=seq(0.7,1.2,by=0.1))
+title(ylab=expression(lambda),line=2)
+title(xlab="Annual Degree Days",line=2)
+
+text(4900,1.17,"e)")
+
+
+plot(temp,lambdas.just.surv,ylim=c(0.65,1.2),
+     xlab="",yaxt="n",main=expression(paste(italic(max[s]),"")),
+     ylab="",type="l",lwd=2.5,
+     panel.first = c(points(temp,lambdas.no.temp,type="l",lty=2,lwd=2.5,
+                            col="darkgrey")
+                     ,abline(h=1,lty=3,col="grey",lwd=2.5)))
+title(ylab=expression(lambda),line=2)
+axis(2,at=seq(0.7,1.2,by=0.1),labels=seq(0.7,1.2,by=0.1))
+title(xlab="Annual Degree Days",line=2)
+
+text(4900,1.17,"f)")
+
+
+plot(temp,lambdas.just.pos,ylim=c(0.65,1.2),
+     xlab="",yaxt="n",main=expression(paste(italic(All)," ",italic(Positive))),
+     ylab="",type="l",lwd=2.5,
+     panel.first = c(points(temp,lambdas.no.temp,type="l",lty=2,lwd=2.5,
+                            col="darkgrey")
+                     ,abline(h=1,lty=3,col="grey",lwd=2.5)))
+title(ylab=expression(lambda),line=2)
+axis(2,at=seq(0.7,1.2,by=0.1),labels=seq(0.7,1.2,by=0.1))
+title(xlab="Annual Degree Days",line=2)
+
+text(4900,1.17,"g)")
+
+
+plot(temp,lambdas.just.neg,ylim=c(0.65,1.2),
+     xlab="",yaxt="n",main=expression(paste(italic(All)," ",italic(Negative)," ")),
+     ylab="",type="l",lwd=2.5,
+     panel.first = c(points(temp,lambdas.no.temp,type="l",lty=2,lwd=2.5,
+                            col="darkgrey")
+                     ,abline(h=1,lty=3,col="grey",lwd=2.5)))
+axis(2,at=seq(0.7,1.2,by=0.1),labels=seq(0.7,1.2,by=0.1))
+title(ylab=expression(lambda),line=2)
+title(xlab="Annual Degree Days",line=2)
+
+text(4900,1.17,"h)")
+
+plot(temp,lambdas.all.factor,ylim=c(0.65,1.2),
+     xlab="",yaxt="n",main=expression(paste(italic(All)," ",
+                                            italic(Interactions))),
+     ylab="",type="l",lwd=2.5,
+     panel.first = c(points(temp,lambdas.no.temp,type="l",lty=2,lwd=2.5,
+                            col="darkgrey")
+                     ,abline(h=1,lty=3,col="grey",lwd=2.5)))
+axis(2,at=seq(0.7,1.2,by=0.1),labels=seq(0.7,1.2,by=0.1))
+title(ylab=expression(lambda),line=2)
+title(xlab="Annual Degree Days",line=2)
+
+text(4900,1.17,"i)")
+
+par(mai=c(0,0,0,0))
+#plot.new()
+
+plot(0, 0, type = 'l', bty = 'n', xaxt = 'n', yaxt = 'n')
+legend(x="center",
+       legend = c("Model Output","No Temperature Dependence",expression(lambda*" = 1")),
+       col = c("black","darkgrey","grey"),
+       lty=c(1, 2,3), xpd = TRUE, horiz = F, bty = 'n',cex=1,
+       lwd=2.5)
 dev.off()
 
 

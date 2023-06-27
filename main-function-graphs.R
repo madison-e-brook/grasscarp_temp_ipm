@@ -2,6 +2,14 @@ library(colorBlindness)
 library(viridis)
 library(RColorBrewer)
 
+displayAvailablePalette(color="white")
+displayAllColors(Blue2DarkRed18Steps, color="white")
+
+displayAllColors(c(Blue2DarkRed18Steps[1],
+                   Blue2DarkRed18Steps[17]), color="white")
+
+
+
 library(nlstools)
 
 setwd("~/Documents/Population modelling/Data")
@@ -123,11 +131,11 @@ png("model graphs.png", width= 2404, height= 1600, units="px", res = 300)
 par(mfrow=c(2,2),mar=c(6,4,1,3))
 
 curve(1/(1+exp(slope.2330*(x-int.2330))),-1,15,col=viridis(4)[1],
-      xlab="Age (years)",ylab="Probability of Maturing",
-      lwd=1)
+      xlab="Age (years)",ylab="Probability of maturing",
+      lwd=1,ylim=c(0,1.1))
 curve(1/(1+exp(slope.3560*(x-int.3560))),-1,15,col=viridis(4)[2],add=T,lwd=1)
 curve(1/(1+exp(slope.4280*(x-int.4280))),-1,15,col=viridis(4)[3],add=T,lwd=1)
-text(-0.75,0.5,"A",cex=2)
+text(15,1.07,"a",cex=1)
 legend("bottomright",c("Superior (DD = 2330)",
                        "Erie (DD = 3560)",
                        "Mississippi (DD = 4280)"),
@@ -136,9 +144,9 @@ legend("bottomright",c("Superior (DD = 2330)",
                    viridis(4)[3]),bty="n",cex=0.7)
 
 
-
-curve((fecund.2330*10^(length.int+length.slope*log10(x)))/1000,0,1000,
-      xlab="Length (mm)",ylab="Total number of eggs",col=viridis(4)[1])
+curve(((fecund.2330*10^(length.int+length.slope*log10(x)))/1000),0,1000,
+      xlab="Length (mm)",ylab="Total number of eggs",col=viridis(4)[1],
+      ylim=c(0,1300000))
 curve((fecund.3560*10^(length.int+length.slope*log10(x)))/1000,0,1000,add=T,
       col=viridis(4)[2])
 curve((fecund.4280*10^(length.int+length.slope*log10(x)))/1000,0,1000,add=T,
@@ -149,20 +157,25 @@ legend("topleft",c("Superior (DD = 2330)",
        lty=1,col=c(viridis(4)[1],
                    viridis(4)[2],
                    viridis(4)[3]),bty="n",cex=0.7)
-text(10,650000,"B",cex=2)
+text(1000,1280000,"b",cex=1)
 
 curve(((surv.max-surv.min)/(1+exp(surv.slope*(x-surv.inflection)))+surv.min),-1,15,
-      xlab="Age (years)",ylab="Probability of Survival",
-      ylim=c(0,1),col=Blue2DarkRed18Steps[1])
+      xlab="Age (years)",ylab="Probability of survival",
+      ylim=c(0,1.1),lty=1)
 curve(((0.6-surv.min)/(1+exp(surv.slope*(x-surv.inflection)))+surv.min),-1,15,add=T,
-      col=Blue2DarkRed18Steps[17])
+      lty=2)
 legend("bottomright",c("Maximum Adult Survival = 0.9",
                        "Maximum Adult Survival = 0.6"),
-       lty=1,col=c(Blue2DarkRed18Steps[1],Blue2DarkRed18Steps[17]),bty="n",cex=0.8)
-text(-0.75,0.5,"C",cex=2)
+       lty=c(1,2),bty="n",cex=0.8)
+text(15,1.07,"c",cex=1)
 
 me<-expression("Growth increment ("*italic("g"["inc"])*") (mm)")
 plot(initial,change,type="l",xlab="Length (mm)",ylab=me,xlim=c(0,1000))
-text(10,80,"D",cex=2)
+text(1000,159,"d",cex=1)
 segments(813,0.1,1000,0.1)
 dev.off()
+
+expression(italics("max"["s"])*" = 0.9")
+
+expression(italic("max"["s"])*" = 0.9")
+expression(italic("max"["s"])*" = 0.6")
