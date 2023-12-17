@@ -43,7 +43,7 @@ abline(k.lm)
 setwd("~/Documents/Thesis/good code")
 png("appendix 3 temp depen k plot.png", width= 2404, height= 1600, units="px", res = 300)
 plot(temperatures,k.values,pch=16,
-     xlab="Annual Degree Days",
+     xlab="Annual Degree-Days",
      ylab="k value")
 abline(k.lm)
 
@@ -64,7 +64,7 @@ expression(italic("L"["inf"]* "= 1784 - 0.19(degree days)"))
 setwd("~/Documents/Thesis/good code")
 png("appendix 3 temp depen Linf plot.png", width= 2404, height= 1600, units="px", res = 300)
 plot(temp.Lvalue,L.values,pch=16,
-     xlab="Annual Degree Days",
+     xlab="Annual Degree-Days",
      ylab=expression("L"["inf"]*" value"))
 abline(L.lm)
 text(4000,1250,expression(italic("L"["inf"]* "= 1784 - 0.19(degree days)")))
@@ -91,7 +91,7 @@ abline(s.lm.09)
 setwd("~/Documents/Thesis/good code")
 png("appendix 3 temp depen survival plot.png", width= 2404, height= 1600, units="px", res = 300)
 plot(temperatures,survs.0.6,pch=16,ylim=c(0.5,1),
-     xlab="Annual Degree Days",
+     xlab="Annual Degree-Days",
      ylab="Maximum Adult Survival")
 points(temperatures,survs.0.9)
 abline(s.lm.06)
@@ -1296,7 +1296,7 @@ text(3300,1.55,expression(paste(italic(All)," ",
 
 title(ylab=expression(lambda),
       outer=T,line=3)
-title(xlab="Annual Degree Days",
+title(xlab="Annual Degree-Days",
       outer=T,line=-2.5)
 
 #plot.new()
