@@ -47,7 +47,7 @@ plot(temperatures,k.values,pch=16,
      ylab="k value")
 abline(k.lm)
 
-text(3500,0.55,expression(italic("k = 0.00018(degree days) - 0.28")))
+text(3500,0.55,expression(italic("k = 0.00018(degree-days) - 0.28")))
 dev.off()
 setwd("~/Documents/Population modelling/Data")
 
@@ -67,7 +67,7 @@ plot(temp.Lvalue,L.values,pch=16,
      xlab="Annual Degree-Days",
      ylab=expression("L"["inf"]*" value"))
 abline(L.lm)
-text(4000,1250,expression(italic("L"["inf"]* "= 1784 - 0.19(degree days)")))
+text(4000,1250,expression(italic("L"["inf"]* "= 1784 - 0.19(degree-days)")))
 dev.off()
 
 #survival and temp####
@@ -96,8 +96,8 @@ plot(temperatures,survs.0.6,pch=16,ylim=c(0.5,1),
 points(temperatures,survs.0.9)
 abline(s.lm.06)
 abline(s.lm.09,lty=2)
-text(3300,0.51,expression(italic("max"["s 0.6"]* "= 0.87 - 7.2x10"^-5*"(degree days)")))
-text(4250,0.99,expression(italic("max"["s 0.9"]* "= 1.2 - 7.2x10"^-5*"(degree days)")))
+text(3300,0.51,expression(italic("max"["s 0.6"]* "= 0.87 - 7.2x10"^-5*"(degree-days)")))
+text(4250,0.99,expression(italic("max"["s 0.9"]* "= 1.2 - 7.2x10"^-5*"(degree-days)")))
 dev.off()
 setwd("~/Documents/Population modelling/Data")
 #look at temperatures between 2000 and 5000
