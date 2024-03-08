@@ -374,24 +374,24 @@ good.matrix
 for(i in 1:length(degree.days)){
   A<-randomLHS(trials,length(param.list))
   B<-matrix(nrow = nrow(A), ncol = ncol(A))
-  B[,1]<-qnorm(A[,1],surv.inflection,sqrt(param.var[1]))
-  B[,2]<-qnorm(A[,2],surv.slope,sqrt(param.var[2]))
+  B[,1]<-qnorm(A[,1],surv.inflection,param.var[1])
+  B[,2]<-qnorm(A[,2],surv.slope,param.var[2])
   B[,3]<-qunif(A[,3],surv.min-surv.min*0.2,surv.min+surv.min*0.2)
-  B[,4]<-qunif(A[,4],surv.max-sd.09^2,surv.max+sd.09^2)
+  B[,4]<-qunif(A[,4],lower.09,lower.09)
   B[,5]<-qunif(A[,5],min.growth-min.growth*0.2,min.growth+min.growth*0.2)
-  B[,6]<-qnorm(A[,6],max.growth.increment,sqrt(param.var[6]))
+  B[,6]<-qnorm(A[,6],max.growth.increment,param.var[6])
   B[,7]<-qnorm(A[,7],max.size,sd.max.size)
-  B[,8]<-qnorm(A[,8],min.std,sqrt(param.var[8]))
-  B[,9]<-qnorm(A[,9],division,sqrt(param.var[9]))
+  B[,8]<-qnorm(A[,8],min.std,param.var[8])
+  B[,9]<-qnorm(A[,9],division,param.var[9])
   B[,10]<-qnorm(A[,10],length.int,sd.length.int)
   B[,11]<-qnorm(A[,11],length.slope,sd.length.slope)
   B[,12]<-qnorm(A[,12],fecundities[i],fecuncity.data[fecuncity.data$newdata.me.AnnualDD==degree.days[i],5])
-  B[,13]<-qnorm(A[,13],aam.ints[i],sqrt(aam.ints[i]*0.2))
-  B[,14]<-qnorm(A[,14],aam.slopes[i],sqrt(abs(aam.slopes[i]*0.2)))
+  B[,13]<-qnorm(A[,13],aam.ints[i],aam.ints[i]*0.2)
+  B[,14]<-qnorm(A[,14],aam.slopes[i],abs(aam.slopes[i]*0.2))
   B[,15]<-qunif(A[,15],percent.hact-percent.hact*0.2,percent.hact+percent.hact*0.2)
   B[,16]<-qunif(A[,16],hatch.surv-hatch.surv*0.2,hatch.surv+hatch.surv*0.2)
-  B[,17]<-qnorm(A[,17],young.mean,sqrt(param.var[17]))
-  B[,18]<-qnorm(A[,18],young.sd,sqrt(param.var[18]))
+  B[,17]<-qnorm(A[,17],young.mean,param.var[17])
+  B[,18]<-qnorm(A[,18],young.sd,param.var[18])
   for(j in 1:nrow(B)){
     constant_list_new <- list(
       surv.inflection=B[j,1],
@@ -422,7 +422,7 @@ for(i in 1:length(degree.days)){
   good.matrix[i,3]<-mean(lambda.matrix[,i])-1.96*(sd(lambda.matrix[,i])/sqrt(trials))
 }
 
-setwd("~/Documents/Thesis/good code")
+setwd("~/Documents/Thesis/good code/updated")
 write.csv(lambda.matrix,"raw lambda values 0.9.csv",row.names = F)
 write.csv(good.matrix,"clean lambda and CI values 0.9.csv",row.names = F)
 
@@ -444,24 +444,24 @@ good.matrix.6
 for(i in 1:length(degree.days)){
   A<-randomLHS(trials,length(param.list))
   B<-matrix(nrow = nrow(A), ncol = ncol(A))
-  B[,1]<-qnorm(A[,1],surv.inflection,sqrt(param.var[1]))
-  B[,2]<-qnorm(A[,2],surv.slope,sqrt(param.var[2]))
+  B[,1]<-qnorm(A[,1],surv.inflection,param.var[1])
+  B[,2]<-qnorm(A[,2],surv.slope,param.var[2])
   B[,3]<-qunif(A[,3],surv.min-surv.min*0.2,surv.min+surv.min*0.2)
-  B[,4]<-qunif(A[,4],0.6-sd.06^2,0.6+sd.06^2)
+  B[,4]<-qunif(A[,4],lower.06,upper.06)
   B[,5]<-qunif(A[,5],min.growth-min.growth*0.2,min.growth+min.growth*0.2)
-  B[,6]<-qnorm(A[,6],max.growth.increment,sqrt(param.var[6]))
+  B[,6]<-qnorm(A[,6],max.growth.increment,param.var[6])
   B[,7]<-qnorm(A[,7],max.size,sd.max.size)
-  B[,8]<-qnorm(A[,8],min.std,sqrt(param.var[8]))
-  B[,9]<-qnorm(A[,9],division,sqrt(param.var[9]))
+  B[,8]<-qnorm(A[,8],min.std,param.var[8])
+  B[,9]<-qnorm(A[,9],division,param.var[9])
   B[,10]<-qnorm(A[,10],length.int,sd.length.int)
   B[,11]<-qnorm(A[,11],length.slope,sd.length.slope)
   B[,12]<-qnorm(A[,12],fecundities[i],fecuncity.data[fecuncity.data$newdata.me.AnnualDD==degree.days[i],5])
-  B[,13]<-qnorm(A[,13],aam.ints[i],sqrt(aam.ints[i]*0.2))
-  B[,14]<-qnorm(A[,14],aam.slopes[i],sqrt(abs(aam.slopes[i]*0.2)))
+  B[,13]<-qnorm(A[,13],aam.ints[i],aam.ints[i]*0.2)
+  B[,14]<-qnorm(A[,14],aam.slopes[i],abs(aam.slopes[i]*0.2))
   B[,15]<-qunif(A[,15],percent.hact-percent.hact*0.2,percent.hact+percent.hact*0.2)
   B[,16]<-qunif(A[,16],hatch.surv-hatch.surv*0.2,hatch.surv+hatch.surv*0.2)
-  B[,17]<-qnorm(A[,17],young.mean,sqrt(param.var[17]))
-  B[,18]<-qnorm(A[,18],young.sd,sqrt(param.var[18]))
+  B[,17]<-qnorm(A[,17],young.mean,param.var[17])
+  B[,18]<-qnorm(A[,18],young.sd,param.var[18])
   for(j in 1:nrow(B)){
     constant_list_new <- list(
       surv.inflection=B[j,1],
@@ -492,7 +492,7 @@ for(i in 1:length(degree.days)){
   good.matrix.6[i,3]<-mean(lambda.matrix.6[,i])-1.96*(sd(lambda.matrix.6[,i])/sqrt(trials))
 }
 
-setwd("~/Documents/Thesis/good code")
+setwd("~/Documents/Thesis/good code/updated")
 write.csv(lambda.matrix.6,"raw lambda values 0.6.csv",row.names = F)
 write.csv(good.matrix.6,"clean lambda and CI values 0.6.csv",row.names = F)
 
