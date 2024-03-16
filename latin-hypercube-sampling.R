@@ -5,7 +5,7 @@ library(lhs)
 setwd("~/Documents/Population modelling/Data")
 
 #THIS IS FOR A SURVIVAL MAX OF 0.9!!!!!#####
-degday<-3000
+degday<-2230
 
 #growth model####
 fish.data<-read.csv("sullivan data raw.csv")
@@ -377,7 +377,7 @@ for(i in 1:length(degree.days)){
   B[,1]<-qnorm(A[,1],surv.inflection,param.var[1])
   B[,2]<-qnorm(A[,2],surv.slope,param.var[2])
   B[,3]<-qunif(A[,3],surv.min-surv.min*0.2,surv.min+surv.min*0.2)
-  B[,4]<-qunif(A[,4],lower.09,lower.09)
+  B[,4]<-qunif(A[,4],lower.09,upper.09)
   B[,5]<-qunif(A[,5],min.growth-min.growth*0.2,min.growth+min.growth*0.2)
   B[,6]<-qnorm(A[,6],max.growth.increment,param.var[6])
   B[,7]<-qnorm(A[,7],max.size,sd.max.size)
